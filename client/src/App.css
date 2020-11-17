@@ -1,5 +1,26 @@
+:root {
+  --primary-color: #A0C4FF;
+  --secondary-color: #BDB2FF;
+  --backup-color1: #FFADAD;
+  --backup-color2: #FFD6A5;
+  --backup-color3: #FDFFB6;
+  --backup-color4: #CAFFBF;
+  --backup-color5: #9BF6FF;
+  --backup-color6: #FFC6FF;
+  --white-color: #FFFFFC;
+}
+
 .App {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
   text-align: center;
+}
+
+.App > * {
+  flex-grow: 1;
 }
 
 .App-logo {
