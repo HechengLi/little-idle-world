@@ -1,34 +1,20 @@
 import React from 'react'
 import { Link, useRouteMatch } from 'react-router-dom'
-import styled from 'styled-components'
+import Map from '../Map'
 
 const TownNav = () => {
   const { url } = useRouteMatch()
+  const routes = [
+    { x: 0, y: 0, height: 100, width: 100, text: '大厅', link: `${url}/hall` },
+    { x: 150, y: 0, height: 100, width: 100, text: '武器', link: `${url}/weapon_shop` },
+    { x: 300, y: 0, height: 100, width: 100, text: '防具', link: `${url}/armor_shop` },
+    { x: 150, y: 150, height: 100, width: 100, text: '药水', link: `${url}/potion_shop` },
+    { x: 150, y: 300, height: 100, width: 100, text: '练功', link: `${url}/training` },
+  ]
 
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to={`${url}/hall`}>大厅</Link>
-        </li>
-        <li>
-          <Link to={`${url}/weapon_shop`}>武器店</Link>
-        </li>
-        <li>
-          <Link to={`${url}/armor_shop`}>防具店</Link>
-        </li>
-        <li>
-          <Link to={`${url}/potion_shop`}>药水店</Link>
-        </li>
-        <li>
-          <Link to={`${url}/training`}>练功房</Link>
-        </li>
-      </ul>
-    </nav>
+    <Map routes={routes} />
   )
 }
 
-const StyledTownNav = styled(TownNav)`
-`
-
-export default StyledTownNav
+export default TownNav
