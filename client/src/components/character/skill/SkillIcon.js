@@ -4,6 +4,7 @@ import Styled from 'styled-components'
 import * as skillType from '../../../resource/data/skillType'
 
 const SkillIcon = ({ className, skill }) => {
+  console.log(skill)
   let type = ''
   switch(skill.type) {
     case skillType.PASSIVE:
@@ -17,19 +18,21 @@ const SkillIcon = ({ className, skill }) => {
   }
 
   return <div className={`${className} ${type}`}>
-    <div className="icon"></div>
+    <div className="icon">
+      <img src={skill.image} alt={skill.name} />
+    </div>
     <div className="name">{skill.name}</div>
   </div>
 }
 
 const StyledSkillIcon = Styled(SkillIcon)`
-  display: flex;
-  flex-direction: column;
+  position: relative;
   width: 100px;
   height: 100px;
   margin: 20px;
   border: 1px solid #777;
   cursor: pointer;
+  padding-bottom: 25px;
   
   &.passive {
     border-color: var(--backup-color1);
@@ -51,11 +54,18 @@ const StyledSkillIcon = Styled(SkillIcon)`
     width: 100%;
     height: 100%;
     flex-grow: 1;
+    
+    img {
+      height: 100%;
+    }
   }
   
   .name {
-    flex-grow: 0;
-    padding: 5px 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2px 0;
   }
 `
 

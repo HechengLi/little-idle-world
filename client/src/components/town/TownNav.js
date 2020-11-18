@@ -5,11 +5,7 @@ import Map from '../Map'
 import test1 from '../../resource/images/test1.jpg'
 import test2 from '../../resource/images/test2.jpg'
 
-const createImage = src => {
-  const image = new Image()
-  image.src = src
-  return image
-}
+import { createImage } from '../../resource/plugins/helpers'
 
 const TownNav = () => {
   const { url } = useRouteMatch()

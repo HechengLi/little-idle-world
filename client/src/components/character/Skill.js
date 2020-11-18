@@ -5,12 +5,15 @@ import SecondaryNav from '../SecondaryNav'
 import * as skillType from '../../resource/data/skillType'
 import SkillIcon from './skill/SkillIcon'
 
+import test3 from '../../resource/images/test3.jpg'
+import test4 from '../../resource/images/test4.jpg'
+
 const tabs = [
   {
     name: '拳法',
     skills: [
-      { name: '基础拳法', type: skillType.PASSIVE },
-      { name: '打击', type: skillType.ACTIVE }
+      { name: '基础拳法', type: skillType.PASSIVE, image: test3 },
+      { name: '打击', type: skillType.ACTIVE, image: test4 }
     ],
     mastery: 100
   },
