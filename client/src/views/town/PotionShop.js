@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import WorkInProgress from '../WorkInProgress'
 
 const PotionShop = () => {
   return (
-    <div>PotionShop</div>
+    <WorkInProgress />
   )
 }
 

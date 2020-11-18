@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import WorkInProgress from '../WorkInProgress'
 
 const ArmorShop = () => {
   return (
-    <div>Armor Shop</div>
+    <WorkInProgress />
   )
 }
 
