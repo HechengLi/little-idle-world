@@ -1,24 +1,16 @@
 import React from 'react'
-import { Link, useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components'
+import SecondaryNav from '../SecondaryNav'
+
+const routes = [
+  { name: '装备', path: 'equipment' },
+  { name: '消耗', path: 'use' },
+  { name: '其他', path: 'etc' }
+]
 
 const InventoryNav = () => {
-  const { url } = useRouteMatch()
-
   return (
-    <nav>
-      <ul>
-        <li>
-          <Link to={`${url}/equipment`}>装备</Link>
-        </li>
-        <li>
-          <Link to={`${url}/use`}>消耗</Link>
-        </li>
-        <li>
-          <Link to={`${url}/etc`}>其他</Link>
-        </li>
-      </ul>
-    </nav>
+    <SecondaryNav routes={routes} />
   )
 }
 
