@@ -4,7 +4,6 @@ import Styled from 'styled-components'
 import * as skillType from '../../../resource/data/skillType'
 
 const SkillIcon = ({ className, skill }) => {
-  console.log(skill)
   let type = ''
   switch(skill.type) {
     case skillType.PASSIVE:
@@ -40,6 +39,10 @@ const StyledSkillIcon = Styled(SkillIcon)`
     .icon {
       background-color: var(--backup-color1);
     }
+    
+    .name {
+      color: var(--backup-color1);
+    }
   }
   
   &.active {
@@ -47,6 +50,10 @@ const StyledSkillIcon = Styled(SkillIcon)`
     
     .icon {
       background-color: var(--backup-color2);
+    }
+    
+    .name {
+      color: var(--backup-color2);
     }
   }
   
