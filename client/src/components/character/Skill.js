@@ -1,34 +1,60 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 
 import SecondaryNav from '../SecondaryNav'
-import Fist from './skill/Fist'
-import Sword from './skill/Sword'
-import NotFound from '../../views/NotFound'
+import * as skillType from '../../resource/data/skillType'
+import SkillIcon from './skill/SkillIcon'
 
-const routes = [
-  { name: '拳修', path: 'fist' },
-  { name: '剑修', path: 'sword' }
+const tabs = [
+  {
+    name: '拳法',
+    skills: [
+      { name: '基础拳法', type: skillType.PASSIVE },
+      { name: '打击', type: skillType.ACTIVE }
+    ],
+    mastery: 100
+  },
+  {
+    name: '剑法',
+    skills: [],
+    mastery: 0
+  }
 ]
 const Skill = ({ className }) => {
-  const { path } = useRouteMatch()
+  const [skillType, setSkillType] = useState(tabs[0])
+
+  const onClick = skillType => {
+    setSkillType(skillType)
+  }
 
   return (
     <div className={className}>
-      <SecondaryNav routes={routes} />
-      <Switch>
-        <Route exact path={path}><Redirect to={`${path}/fist`} /></Route>
-        <Route exact path={`${path}/fist`} component={Fist} />
-        <Route exact path={`${path}/sword`} component={Sword} />
-        <Route path="*" component={NotFound} />
-      </Switch>
+      <SecondaryNav mode='tab' routes={tabs} active={skillType.name} onClick={onClick} />
+      <p>修炼值: {skillType.mastery}</p>
+      {
+        skillType.skills.length === 0
+        ? <p>未发现任何技能</p>
+        : <div>
+            {
+              skillType.skills.map(skill =>
+                <SkillIcon key={skill.name} skill={skill} />
+              )
+            }
+          </div>
+      }
     </div>
   )
 }
 
 const StyledSkill = styled(Skill)`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  & > div {
+    height: 100%;
+    display: flex;
+  }
 `
 
 export default StyledSkill
