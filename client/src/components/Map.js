@@ -45,11 +45,14 @@ const Map = ({ className, routes }) => {
   useEffect(() => {
     const canvas = canvasEl.current
     const context = canvas.getContext('2d')
+    const { width, height } = canvasEl.current
+    const fontSize = 15/sizeRatio
     context.clearRect(0, 0, canvas.width, canvas.height)
     context.lineWidth = 2
     context.lineJoin = 'round'
     context.textAlign = 'center'
     context.textBaseline = 'top'
+    context.font = `${fontSize}px Arial`
 
     let hover = null
     routes.forEach(route => {
@@ -57,28 +60,54 @@ const Map = ({ className, routes }) => {
       context.strokeStyle = '#BDB2FF'
       context.shadowColor = '#BDB2FF'
       context.shadowBlur = 5
-      if (x >= route.x*widthRatio*sizeRatio && x <= (route.x+route.width)*widthRatio*sizeRatio
-          && y >= route.y*heightRatio*sizeRatio && y <= (route.y+route.height)*heightRatio*sizeRatio) {
+      context.fillStyle = '#BDB2FF'
+
+      let posX, posY, rectWidth, rectHeight
+      switch(route.type) {
+        case 'percentage':
+          posX = route.x * width - route.width * Math.max(width, height) / 2
+          posY = route.y * height - route.width * Math.max(width, height) / 2
+          rectWidth = route.width * Math.max(width, height)
+          rectHeight = route.height * Math.max(width, height)
+          break
+        default:
+          posX = route.x
+          posY = route.y
+          rectWidth = route.width
+          rectHeight = route.height
+      }
+      if (route.image) {
+        if (route.image.complete) {
+          context.drawImage(route.image, posX, posY, rectWidth, rectHeight)
+        } else {
+          route.image.onload = () => {
+            context.drawImage(route.image, posX, posY, rectWidth, rectHeight)
+          }
+        }
+      }
+
+      if (x >= posX*widthRatio*sizeRatio && x <= (posX+rectWidth)*widthRatio*sizeRatio
+          && y >= posY*heightRatio*sizeRatio && y <= (posY+rectHeight)*heightRatio*sizeRatio) {
         context.strokeStyle = '#FFC6FF'
         context.shadowColor = '#FFC6FF'
+        context.fillStyle = "#FFC6FF"
         hover = route
       }
       context.strokeRect(
-        route.x*widthRatio*sizeRatio,
-        route.y*heightRatio*sizeRatio,
-        route.width*widthRatio*sizeRatio,
-        route.height*heightRatio*sizeRatio
+        posX*widthRatio*sizeRatio,
+        posY*heightRatio*sizeRatio,
+        rectWidth*widthRatio*sizeRatio,
+        rectHeight*heightRatio*sizeRatio
       )
       context.scale(widthRatio*sizeRatio, heightRatio*sizeRatio)
       context.fillText(
         route.text,
-        route.x+route.width/2,
-        route.y+route.height+5
+        posX+rectWidth/2,
+        posY+rectHeight+10
       )
     })
 
     const onClick = () => {
-      console.log(1)
       history.push(hover.link)
     }
     if (hover) {
