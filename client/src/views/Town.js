@@ -4,10 +4,9 @@ import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 import BackButton from '../components/BackButton'
 import TownNav from '../components/town/TownNav'
-import WeaponShop from './town/WeaponShop'
-import ArmorShop from './town/ArmorShop'
+import Smithing from './town/Smithing'
 import Hall from './town/Hall'
-import PotionShop from './town/PotionShop'
+import Potion from './town/Potion'
 import Training from './town/Training'
 import NotFound from './NotFound'
 
@@ -20,9 +19,8 @@ const Town = () => {
       <Switch>
         <Route exact path={path} component={TownNav} />
         <Route exact path={`${path}/hall`} component={Hall} />
-        <Route exact path={`${path}/weapon_shop`} component={WeaponShop} />
-        <Route exact path={`${path}/armor_shop`} component={ArmorShop} />
-        <Route exact path={`${path}/potion_shop`} component={PotionShop} />
+        <Route exact path={`${path}/smith`} component={Smithing} />
+        <Route exact path={`${path}/potion`} component={Potion} />
         <Route exact path={`${path}/training`} component={Training} />
         <Route path="*" component={NotFound} />
       </Switch>

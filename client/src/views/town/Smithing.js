@@ -2,13 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import WorkInProgress from '../WorkInProgress'
 
-const PotionShop = () => {
+const Smithing = () => {
   return (
     <WorkInProgress />
   )
 }
 
-const StyledPotionShop = styled(PotionShop)`
+const StyledSmithing = styled(Smithing)`
 `
 
-export default StyledPotionShop
+export default StyledSmithing
