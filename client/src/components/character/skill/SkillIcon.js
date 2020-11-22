@@ -27,7 +27,7 @@ const SkillIcon = ({ className, skill }) => {
 const StyledSkillIcon = Styled(SkillIcon)`
   position: relative;
   width: 100px;
-  height: 100px;
+  height: 120px;
   margin: 20px;
   border: 1px solid #777;
   cursor: pointer;
@@ -60,6 +60,7 @@ const StyledSkillIcon = Styled(SkillIcon)`
   .icon {
     width: 100%;
     height: 100%;
+    padding: 5px;
     flex-grow: 1;
     
     img {

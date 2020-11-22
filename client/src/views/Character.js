@@ -15,10 +15,6 @@ const Character = ({ className }) => {
 
 const StyledCharacter = styled(Character)`
   display: flex;
-  
-  & > div {
-    flex-grow: 1;
-  }
 `
 
 export default StyledCharacter

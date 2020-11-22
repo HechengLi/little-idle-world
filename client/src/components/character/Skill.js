@@ -1,63 +1,74 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import { Redirect, Route, Switch, useRouteMatch, useParams } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import SecondaryNav from '../SecondaryNav'
-import * as skillType from '../../resource/data/skillType'
 import SkillIcon from './skill/SkillIcon'
 
-import test3 from '../../resource/images/test3.jpg'
-import test4 from '../../resource/images/test4.jpg'
+const SkillView = ({ className, skills }) => {
+  const { skillType } = useParams()
+  const selectedSkills = skills[skillType]
 
-const tabs = [
-  {
-    name: '拳法',
-    skills: [
-      { name: '基础拳法', type: skillType.PASSIVE, image: test3 },
-      { name: '打击', type: skillType.ACTIVE, image: test4 }
-    ],
-    mastery: 100
-  },
-  {
-    name: '剑法',
-    skills: [],
-    mastery: 0
-  }
-]
-const Skill = ({ className }) => {
-  const [skillType, setSkillType] = useState(tabs[0])
-
-  const onClick = skillType => {
-    setSkillType(skillType)
-  }
+  if (!selectedSkills) return <p>未知修炼</p>
 
   return (
-    <div className={className}>
-      <SecondaryNav mode='tab' routes={tabs} active={skillType.name} onClick={onClick} />
-      <p>修炼值: {skillType.mastery}</p>
+    <React.Fragment>
+      <p>修炼值: {selectedSkills.mastery}</p>
       {
-        skillType.skills.length === 0
+        selectedSkills.skills.length === 0
         ? <p>未发现任何技能</p>
-        : <div>
+        : <div className={className}>
             {
-              skillType.skills.map(skill =>
+              selectedSkills.skills.map(skill =>
                 <SkillIcon key={skill.name} skill={skill} />
               )
             }
           </div>
       }
+    </React.Fragment>
+  )
+}
+
+const StyledSkillView = styled(SkillView)`
+  height: 100%;
+  display: flex;
+`
+
+const mapStateToProps = state => ({
+  skills: state.skills
+})
+
+const ReduxSkillView = connect(
+  mapStateToProps
+)(StyledSkillView)
+
+const routes = [
+  { name: '拳修', path: 'fist' },
+  { name: '剑修', path: 'sword' },
+  { name: '其他', path: 'etc' }
+]
+
+const Skill = ({ className }) => {
+  const { path } = useRouteMatch()
+
+  return (
+    <div className={className}>
+      <SecondaryNav routes={routes} />
+      <Switch>
+        <Route exact path={`${path}`}>
+          <Redirect to={`${path}/fist`} />
+        </Route>
+        <Route path={`${path}/:skillType`} component={ReduxSkillView} />
+      </Switch>
     </div>
   )
 }
 
 const StyledSkill = styled(Skill)`
-  width: 100%;
   display: flex;
   flex-direction: column;
-  
-  & > div {
-    height: 100%;
-    display: flex;
-  }
+  flex-grow: 1;
 `
 
 export default StyledSkill

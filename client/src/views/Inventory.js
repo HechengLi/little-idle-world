@@ -1,28 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom'
 
-import InventoryNav from '../components/inventory/InventoryNav'
-import Equipment from './inventory/Equipment'
-import Use from './inventory/Use'
-import Etc from './inventory/Etc'
-import NotFound from './NotFound'
+import SecondaryNav from '../components/SecondaryNav'
+import test5 from '../resource/images/test5.jpg'
+import test6 from '../resource/images/test6.jpg'
+
+const tabs = [
+  {
+    name: '装备',
+    skills: [
+      { name: '基础拳法', image: test5 },
+      { name: '打击', image: test6 }
+    ],
+    mastery: 100
+  },
+  {
+    name: '消耗',
+    skills: [],
+    mastery: 0
+  },
+  {
+    name: '其他',
+    skills: [],
+    mastery: 0
+  }
+]
 
 const Inventory = () => {
-  const { path } = useRouteMatch()
+  const [skillType, setSkillType] = useState(tabs[0])
+  const onClick = skillType => {
+    setSkillType(skillType)
+  }
 
   return (
     <div>
-      <InventoryNav />
-      <Switch>
-        <Route exact path={`${path}`}>
-          <Redirect to={`${path}/equipment`} />
-        </Route>
-        <Route exact path={`${path}/equipment`} component={Equipment} />
-        <Route exact path={`${path}/use`} component={Use} />
-        <Route exact path={`${path}/etc`} component={Etc} />
-        <Route path="*" component={NotFound} />
-      </Switch>
+      <SecondaryNav mode='tab' routes={tabs} active={skillType.name} onClick={onClick} />
     </div>
   )
 }
