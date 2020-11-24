@@ -11,7 +11,7 @@ import Town from './views/Town'
 import Character from './views/Character'
 import World from './views/World'
 import Inventory from './views/Inventory'
-import Quest from './views/Quest'
+import Setting from './views/Setting'
 import NotFound from './views/NotFound'
 
 import './App.css'
@@ -27,7 +27,7 @@ const App = () => {
           <Route path="/character" component={Character} />
           <Route path="/world" component={World} />
           <Route path="/inventory" component={Inventory} />
-          <Route path="/quest" component={Quest} />
+          <Route path="/setting" component={Setting} />
           <Route path="*" component={NotFound} />
         </Switch>
       </div>

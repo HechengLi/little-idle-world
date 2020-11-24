@@ -32,8 +32,11 @@ const SkillView = ({ className, skills, mastery }) => {
 }
 
 const StyledSkillView = styled(SkillView)`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow: auto;
 `
 
 const routes = [

@@ -20,6 +20,7 @@ const StyledBasic = Styled(Basic)`
   justify-content: center;
   align-items: center;
   flex-grow: 0;
+  flex-shrink: 0;
   border-right: 1px solid var(--secondary-color);
 `
 

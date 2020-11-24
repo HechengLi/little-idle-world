@@ -23,6 +23,11 @@ const InventoryView = ({ className, inventory }) => {
 }
 
 const StyledInventoryView = styled(InventoryView)`
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow: auto;
 `
 
 const routes = [
@@ -31,7 +36,7 @@ const routes = [
   { name: '其他', path: itemCategoryReverseMap[itemCategory.ETC] }
 ]
 
-const Inventory = ({ inventory }) => {
+const Inventory = ({ className, inventory }) => {
   const { path } = useRouteMatch()
 
   const memoizedInventory = useMemo(() => {
@@ -46,7 +51,7 @@ const Inventory = ({ inventory }) => {
   }, [inventory])
 
   return (
-    <div>
+    <div className={className}>
       <SecondaryNav routes={routes} />
       <Switch>
         <Route exact path={`${path}`}>
@@ -63,6 +68,8 @@ const mapStateToProps = state => ({
 })
 
 const StyledInventory = styled(Inventory)`
+  display: flex;
+  flex-direction: column;
 `
 
 export default connect(

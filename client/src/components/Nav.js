@@ -19,7 +19,7 @@ const Nav = ({ className }) => {
           <NavLink to="/inventory" activeClassName="active">背包</NavLink>
         </li>
         <li>
-          <NavLink to="/quest" activeClassName="active">任务</NavLink>
+          <NavLink to="/setting" activeClassName="active">设置</NavLink>
         </li>
       </ul>
     </nav>
