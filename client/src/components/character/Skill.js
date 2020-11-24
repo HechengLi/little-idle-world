@@ -1,26 +1,28 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { Redirect, Route, Switch, useRouteMatch, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import SecondaryNav from '../SecondaryNav'
 import SkillIcon from './skill/SkillIcon'
+import * as skillCategory from '../../resource/data/skillCategory'
+import skillCategoryReverseMap from '../../resource/data/skillCategoryReverseMap'
 
-const SkillView = ({ className, skills }) => {
-  const { skillType } = useParams()
-  const selectedSkills = skills[skillType]
+const SkillView = ({ className, skills, mastery }) => {
+  const { skillCategory } = useParams()
+  const selectedSkills = skills[skillCategory]
 
   if (!selectedSkills) return <p>未知修炼</p>
 
   return (
     <React.Fragment>
-      <p>修炼值: {selectedSkills.mastery}</p>
+      <p>修炼值: {mastery[skillCategory]}</p>
       {
-        selectedSkills.skills.length === 0
+        selectedSkills.length === 0
         ? <p>未发现任何技能</p>
         : <div className={className}>
             {
-              selectedSkills.skills.map(skill =>
+              selectedSkills.map(skill =>
                 <SkillIcon key={skill.name} skill={skill} />
               )
             }
@@ -35,22 +37,32 @@ const StyledSkillView = styled(SkillView)`
   display: flex;
 `
 
-const mapStateToProps = state => ({
-  skills: state.skills
-})
-
-const ReduxSkillView = connect(
-  mapStateToProps
-)(StyledSkillView)
-
 const routes = [
-  { name: '拳修', path: 'fist' },
-  { name: '剑修', path: 'sword' },
-  { name: '其他', path: 'etc' }
+  { name: '拳修', path: skillCategoryReverseMap[skillCategory.FIST] },
+  { name: '剑修', path: skillCategoryReverseMap[skillCategory.SWORD] }
 ]
 
-const Skill = ({ className }) => {
+const Skill = ({ className, skills, mastery }) => {
   const { path } = useRouteMatch()
+
+  const memoizedSkill = useMemo(() => {
+    const skillsFiltered = {}
+    Object.values(skillCategory).forEach(key => {
+      skillsFiltered[skillCategoryReverseMap[key]] = []
+    })
+    skills.forEach(item => {
+      skillsFiltered[skillCategoryReverseMap[item.category]].push(item)
+    })
+    return skillsFiltered
+  }, [skills])
+
+  const memoizedMastery = useMemo(() => {
+    const masteryFiltered = {}
+    Object.values(skillCategory).forEach(key => {
+      masteryFiltered[skillCategoryReverseMap[key]] = mastery[key]
+    })
+    return masteryFiltered
+  }, [mastery])
 
   return (
     <div className={className}>
@@ -59,7 +71,7 @@ const Skill = ({ className }) => {
         <Route exact path={`${path}`}>
           <Redirect to={`${path}/fist`} />
         </Route>
-        <Route path={`${path}/:skillType`} component={ReduxSkillView} />
+        <Route path={`${path}/:skillCategory`} render={ () => <StyledSkillView skills={memoizedSkill} mastery={memoizedMastery} /> } />
       </Switch>
     </div>
   )
@@ -71,4 +83,11 @@ const StyledSkill = styled(Skill)`
   flex-grow: 1;
 `
 
-export default StyledSkill
+const mapStateToProps = state => ({
+  skills: state.skills.list,
+  mastery: state.skills.mastery
+})
+
+export default connect(
+  mapStateToProps
+)(StyledSkill)

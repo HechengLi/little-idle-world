@@ -1,20 +1,10 @@
 import React from 'react'
 import Styled from 'styled-components'
 
-import * as skillType from '../../../resource/data/skillType'
+import skillTypeReverseMap from '../../../resource/data/skillTypeReverseMap'
 
 const SkillIcon = ({ className, skill }) => {
-  let type = ''
-  switch(skill.type) {
-    case skillType.PASSIVE:
-      type = 'passive'
-      break
-    case skillType.ACTIVE:
-      type = 'active'
-      break
-    default:
-      type = ''
-  }
+  let type = skillTypeReverseMap[skill.type]
 
   return <div className={`${className} ${type}`}>
     <div className="icon">
