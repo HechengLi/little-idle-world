@@ -1,0 +1,11 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "description": "common data for little idle world",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

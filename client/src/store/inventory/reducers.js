@@ -1,4 +1,4 @@
-import * as itemCategory from '../../resource/data/itemCategory'
+import { itemCategory } from 'common-data'
 import test5 from '../../resource/images/test5.jpg'
 import test6 from '../../resource/images/test6.jpg'
 

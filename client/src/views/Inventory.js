@@ -4,8 +4,7 @@ import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-
 import { connect } from 'react-redux'
 
 import SecondaryNav from '../components/SecondaryNav'
-import * as itemCategory from '../resource/data/itemCategory'
-import itemCategoryReverseMap from '../resource/data/itemCategoryReverseMap'
+import { itemCategory, itemCategoryReverseMap } from 'common-data'
 import InventoryItem from '../components/inventory/InventoryItem'
 
 const InventoryView = ({ className, inventory }) => {

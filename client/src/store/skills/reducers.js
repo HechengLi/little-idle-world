@@ -1,5 +1,4 @@
-import * as skillType from '../../resource/data/skillType'
-import * as skillCategory from '../../resource/data/skillCategory'
+import { skillType, skillCategory } from 'common-data'
 import test3 from '../../resource/images/test3.jpg'
 import test4 from '../../resource/images/test4.jpg'
 
