@@ -7,7 +7,7 @@ import SecondaryNav from '../SecondaryNav'
 import SkillIcon from './skill/SkillIcon'
 import { skillCategory, skillCategoryReverseMap } from 'common-data'
 
-const SkillView = ({ className, skills, mastery }) => {
+const SkillView = ({ className, skills }) => {
   const { skillCategory } = useParams()
   const selectedSkills = skills[skillCategory]
 
@@ -15,7 +15,6 @@ const SkillView = ({ className, skills, mastery }) => {
 
   return (
     <React.Fragment>
-      <p>修炼值: {mastery[skillCategory]}</p>
       {
         selectedSkills.length === 0
         ? <p>未发现任何技能</p>
@@ -44,7 +43,7 @@ const routes = [
   { name: '剑修', path: skillCategoryReverseMap[skillCategory.SWORD] }
 ]
 
-const Skill = ({ className, skills, mastery }) => {
+const Skill = ({ className, skills }) => {
   const { path } = useRouteMatch()
 
   const memoizedSkill = useMemo(() => {
@@ -58,14 +57,6 @@ const Skill = ({ className, skills, mastery }) => {
     return skillsFiltered
   }, [skills])
 
-  const memoizedMastery = useMemo(() => {
-    const masteryFiltered = {}
-    Object.values(skillCategory).forEach(key => {
-      masteryFiltered[skillCategoryReverseMap[key]] = mastery[key]
-    })
-    return masteryFiltered
-  }, [mastery])
-
   return (
     <div className={className}>
       <SecondaryNav routes={routes} />
@@ -73,7 +64,7 @@ const Skill = ({ className, skills, mastery }) => {
         <Route exact path={`${path}`}>
           <Redirect to={`${path}/fist`} />
         </Route>
-        <Route path={`${path}/:skillCategory`} render={ () => <StyledSkillView skills={memoizedSkill} mastery={memoizedMastery} /> } />
+        <Route path={`${path}/:skillCategory`} render={ () => <StyledSkillView skills={memoizedSkill} /> } />
       </Switch>
     </div>
   )
@@ -86,8 +77,7 @@ const StyledSkill = styled(Skill)`
 `
 
 const mapStateToProps = state => ({
-  skills: state.skills.list,
-  mastery: state.skills.mastery
+  skills: state.skills
 })
 
 export default connect(

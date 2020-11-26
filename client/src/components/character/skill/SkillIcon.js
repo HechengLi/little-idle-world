@@ -10,6 +10,7 @@ const SkillIcon = ({ className, skill }) => {
     <div className="icon">
       <img src={skill.image} alt={skill.name} />
     </div>
+    <div className="mastery">{skill.mastery}</div>
     <div className="name">{skill.name}</div>
   </div>
 }
@@ -17,16 +18,19 @@ const SkillIcon = ({ className, skill }) => {
 const StyledSkillIcon = Styled(SkillIcon)`
   position: relative;
   width: 100px;
-  height: 120px;
+  height: 150px;
   margin: 20px;
   border: 1px solid #777;
   cursor: pointer;
-  padding-bottom: 25px;
   
   &.passive {
     border-color: var(--backup-color1);
     
     .icon {
+      background-color: var(--backup-color1);
+    }
+    
+    .mastery {
       background-color: var(--backup-color1);
     }
     
@@ -42,6 +46,10 @@ const StyledSkillIcon = Styled(SkillIcon)`
       background-color: var(--backup-color2);
     }
     
+    .mastery {
+      background-color: var(--backup-color2);
+    }
+    
     .name {
       color: var(--backup-color2);
     }
@@ -49,8 +57,8 @@ const StyledSkillIcon = Styled(SkillIcon)`
   
   .icon {
     width: 100%;
-    height: 100%;
-    padding: 5px;
+    height: 100px;
+    padding: 10px;
     flex-grow: 1;
     
     img {
@@ -58,12 +66,12 @@ const StyledSkillIcon = Styled(SkillIcon)`
     }
   }
   
+  .mastery {
+    height: 25px;
+  }
+  
   .name {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 2px 0;
+    height: 25px;
   }
 `
 

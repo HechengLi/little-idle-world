@@ -3,16 +3,10 @@ import test3 from '../../resource/images/test3.jpg'
 import test4 from '../../resource/images/test4.jpg'
 
 export default function skillsReducer(
-  state = {
-    list: [
-      { name: '基础拳法', category: skillCategory.FIST, type: skillType.PASSIVE, image: test3 },
-      { name: '打击', category: skillCategory.FIST, type: skillType.ACTIVE, image: test4 }
-    ],
-    mastery: {
-      [skillCategory.FIST]: 100,
-      [skillCategory.SWORD]: 0
-    }
-  },
+  state = [
+    { name: '基础拳法', category: skillCategory.FIST, type: skillType.PASSIVE, mastery: 100, image: test3 },
+    { name: '打击', category: skillCategory.FIST, type: skillType.ACTIVE, mastery: 10, image: test4 }
+  ],
   action
 ) {
   switch(action.type) {
