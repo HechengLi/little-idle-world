@@ -15,7 +15,7 @@ const World = () => {
       { isExact ? null : <BackButton to={path} /> }
       <Switch>
         <Route exact path={path} component={WorldNav} />
-        <Route exact path={`${path}/slime_forest`} component={SlimeForest} />
+        <Route path={`${path}/slime_forest`} component={SlimeForest} />
         <Route path="*" component={NotFound} />
       </Switch>
     </React.Fragment>

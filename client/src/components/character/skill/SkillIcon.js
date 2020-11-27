@@ -10,7 +10,7 @@ const SkillIcon = ({ className, skill }) => {
     <div className="icon">
       <img src={skill.image} alt={skill.name} />
     </div>
-    <div className="mastery">{skill.mastery}</div>
+    <div className="mastery">Lv{skill.mastery} (10%)</div>
     <div className="name">{skill.name}</div>
   </div>
 }

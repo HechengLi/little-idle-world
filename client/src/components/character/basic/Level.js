@@ -3,7 +3,7 @@ import Styled from 'styled-components'
 
 const Level = () => {
   return (
-    <div>境界 练气</div>
+    <div><b>境界</b> 练气</div>
   )
 }
 

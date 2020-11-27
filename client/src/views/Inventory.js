@@ -15,9 +15,7 @@ const InventoryView = ({ className, inventory }) => {
 
   return <div className={className}>
     {
-      selectedInventory.map((item, i) =>
-        <InventoryItem item={item} key={i} />
-      )
+      selectedInventory.map((item, i) => <InventoryItem item={item} key={i} />)
     }
   </div>
 }
