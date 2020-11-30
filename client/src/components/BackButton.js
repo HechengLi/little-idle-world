@@ -10,6 +10,7 @@ const StyledBackButton = styled(BackButton)`
   position: absolute;
   left: 0;
   top: 0;
+  z-index: 999;
 `
 
 export default StyledBackButton

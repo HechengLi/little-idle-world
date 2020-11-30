@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { NavLink, Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+
 import SlimeForestTiles from './slimeForestTiles/slimeForestTiles'
 
 const MapComponent = ({ className }) => {
-  const { tile } = useParams()
+  const { id } = useParams()
 
-  const SlimeForestTile = SlimeForestTiles[`SlimeForest${tile[0].toUpperCase()}${tile.substring(1)}`]
+  const SlimeForestTile = SlimeForestTiles[`SlimeForestTile${id}`]
 
   return (
     <div className={className}>
@@ -24,6 +25,7 @@ const SlimeForest = ({ className }) => {
   const { path, url } = useRouteMatch()
 
   return (
+    // TODO: should have a general component for world
     <div className={className}>
       <ul>
         <li><NavLink to={`${url}/tile1`} activeClassName="active">tile 1</NavLink></li>
@@ -40,7 +42,7 @@ const SlimeForest = ({ className }) => {
         <Route exact path={`${path}`}>
           <Redirect to={`${path}/tile1`} />
         </Route>
-        <Route path={`${path}/:tile`} component={StyledMapComponent} />
+        <Route path={`${path}/tile:id`} component={StyledMapComponent} />
       </Switch>
     </div>
   )

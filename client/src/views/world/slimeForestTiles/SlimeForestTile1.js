@@ -1,9 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
+import Battle from '../../../components/battle/Battle'
 
 const SlimeForestTile1 = () => {
+  const { url, path } = useRouteMatch()
+
   return (
-    <div>tile 1</div>
+    <Switch>
+      <Route exact path={`${path}`}>
+        <ul>
+          <li><Link to={`${url}/battle`}>Slime</Link></li>
+        </ul>
+      </Route>
+      <Route path={`${path}/battle`} component={Battle} />
+    </Switch>
   )
 }
 
