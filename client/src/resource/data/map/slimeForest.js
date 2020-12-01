@@ -11,7 +11,7 @@ const road3 = {
   entities: []
 }
 const tree1 = {
-  x: 0.25, y: 0.5, height: 0.1, width: 0.1, type: 'percentage', text: '小树1', link: `tree1`,
+  x: 0.25, y: 0.65, height: 0.1, width: 0.1, type: 'percentage', text: '小树1', link: `tree1`,
   entities: ['slime']
 }
 const tree2 = {
