@@ -1,7 +1,7 @@
 import React from 'react'
 import Styled from 'styled-components'
 
-import { skillTypeReverseMap } from 'common-data'
+import { skillTypeReverseMap } from 'common-data/skill'
 
 const SkillIcon = ({ className, skill }) => {
   let type = skillTypeReverseMap[skill.type]

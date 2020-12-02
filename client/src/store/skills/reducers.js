@@ -1,4 +1,4 @@
-import { skillType, skillCategory } from 'common-data'
+import { skillType, skillCategory } from 'common-data/skill'
 import test3 from '../../resource/images/test3.jpg'
 import test4 from '../../resource/images/test4.jpg'
 

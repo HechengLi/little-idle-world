@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import SecondaryNav from '../SecondaryNav'
 import SkillIcon from './skill/SkillIcon'
-import { skillCategory, skillCategoryReverseMap } from 'common-data'
+import { skillCategory, skillCategoryReverseMap } from 'common-data/skill'
 
 const SkillView = ({ className, skills }) => {
   const { skillCategory } = useParams()

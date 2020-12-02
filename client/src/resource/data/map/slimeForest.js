@@ -1,6 +1,11 @@
+import test6 from '../../images/test6.jpg'
+import { entityCategory } from 'common-data/entity'
+
 const road1 = {
   x: 0.25, y: 0.5, height: 0.1, width: 0.1, type: 'percentage', text: '小路1', link: `road1`,
-  entities: []
+  entities: [
+    { name: '史莱姆', image: test6, category: entityCategory.MONSTER }
+  ]
 }
 const road2 = {
   x: 0.5, y: 0.5, height: 0.1, width: 0.1, type: 'percentage', text: '小路2', link: `road2`,
@@ -12,7 +17,7 @@ const road3 = {
 }
 const tree1 = {
   x: 0.25, y: 0.65, height: 0.1, width: 0.1, type: 'percentage', text: '小树1', link: `tree1`,
-  entities: ['slime']
+  entities: []
 }
 const tree2 = {
   x: 0.3, y: 0.17, height: 0.1, width: 0.1, type: 'percentage', text: '小树2', link: `tree2`,
@@ -33,7 +38,10 @@ const plain2 = {
 
 const entrance = {
   x: 0.15, y: 0.15, height: 0.1, width: 0.1, type: 'percentage', text: '入口', link: '',
-  entities: [],
+  entities: [
+    { name: '史莱姆1', image: test6, category: entityCategory.MONSTER },
+    { name: '史莱姆2', image: test6, category: entityCategory.MONSTER }
+  ],
   path: [road1, road2, road3]
 }
 

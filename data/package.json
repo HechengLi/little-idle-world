@@ -2,7 +2,7 @@
   "name": "data",
   "version": "1.0.0",
   "description": "common data for little idle world",
-  "main": "index.js",
+  "main": "skill.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
