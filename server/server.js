@@ -20,12 +20,13 @@ router
 
 app
   .use(bodyParser())
+
   .use(async (ctx, next) => {
     try {
       await next()
     } catch (err) {
-      ctx.status = err.statusCode
-      ctx.body = err.message
+      //TODO: log error
+      throw err
     }
   })
   .use(router.routes())
