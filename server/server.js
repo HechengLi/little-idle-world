@@ -39,7 +39,7 @@ router
     const payload = { username, expire: dayjs().unix() }
     const token = jwt.sign(payload, secret)
     ctx.body = token
-    ctx.cookies.set("access_token", token, { httpOnly: true })
+    ctx.cookies.set("access_token", token, { httpOnly: true, /*secure: true, */maxAge: 3600000 })
   })
   .get('/data', async (ctx, next) => {
     ctx.body = ctx.request.jwtPayload.username
@@ -57,10 +57,10 @@ app
   })
   .use(async (ctx, next) => {
     if (ctx.request.url !== '/auth') {
-      if (!ctx.headers.authorization) ctx.throw(403, 'No Authorization header found')
-      const token = ctx.headers.authorization
+      const accessToken = ctx.cookies.get('access_token')
+      if (!accessToken) ctx.throw(403, 'No access token found')
       try {
-        ctx.request.jwtPayload = jwt.verify(token.replace('Bearer ', ''), secret)
+        ctx.request.jwtPayload = jwt.verify(accessToken, secret)
       } catch (err) {
         ctx.throw(401, 'Failed to verify token')
       }
@@ -72,7 +72,7 @@ app
       if (ctx.request.jwtPayload.expire < dayjs().unix()) { // token expired
         const payload = { username: ctx.request.jwtPayload.username, expire: dayjs().unix() }
         const token = jwt.sign(payload, secret)
-        ctx.cookies.set("access_token", token, { httpOnly: true })
+        ctx.cookies.set("access_token", token, { httpOnly: true, /*secure: true, */maxAge: 3600000 })
       }
     }
     await next()
