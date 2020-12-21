@@ -7,12 +7,8 @@ import {
 } from 'react-router-dom'
 
 import Nav from './components/Nav'
-import Town from './views/Town'
-import Character from './views/Character'
-import World from './views/World'
-import Inventory from './views/Inventory'
-import Setting from './views/Setting'
-import NotFound from './views/NotFound'
+import Auth from './views/auth/Auth'
+import Login from './views/auth/Login'
 
 import './App.css'
 
@@ -23,12 +19,8 @@ const App = () => {
         <Nav />
         <Switch>
           <Route path="/" exact><Redirect to="/town" /></Route>
-          <Route path="/town" component={Town} />
-          <Route path="/character" component={Character} />
-          <Route path="/world" component={World} />
-          <Route path="/inventory" component={Inventory} />
-          <Route path="/setting" component={Setting} />
-          <Route path="*" component={NotFound} />
+          <Route path="/login" component={Login} />
+          <Route path="*" component={Auth} />
         </Switch>
       </div>
     </Router>
