@@ -9,7 +9,7 @@ const Login = () => {
 
   const submit = event => {
     event.preventDefault()
-    axios.post('/auth', { username, password })
+    axios.post('/uapi/auth', { username, password })
       .then(res => {
         history.push('/')
       })

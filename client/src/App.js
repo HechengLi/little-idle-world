@@ -6,7 +6,6 @@ import {
   Redirect
 } from 'react-router-dom'
 
-import Nav from './components/Nav'
 import Auth from './views/auth/Auth'
 import Login from './views/auth/Login'
 
@@ -16,7 +15,6 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <Nav />
         <Switch>
           <Route path="/" exact><Redirect to="/town" /></Route>
           <Route path="/login" component={Login} />

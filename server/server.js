@@ -9,6 +9,7 @@ const db = new DataBase()
 
 const utils = require('./utils/utils')
 const authenticationRoutes = require('./routes/authentication')
+const { GENERATE_TOKEN } = require('./utils/actions')
 
 const secret = process.env.JWT_SECRET || 'secret'
 
@@ -16,25 +17,25 @@ const app = new Koa()
 const router = new Router()
 
 router
-  .post('/custom_error', (ctx, next) => {
-    ctx.throw(400, 'test error')
-  })
-  .post('/default_error', (ctx, next) => {
-    throw new Error()
-  })
   .get('/api/data', async (ctx, next) => {
-    ctx.body = ctx.state.jwtPayload.username
+    ctx.body = ctx.state.jwtPayload.userId
   })
+  // .post('/custom_error', (ctx, next) => {
+  //   ctx.throw(400, 'test error')
+  // })
+  // .post('/default_error', (ctx, next) => {
+  //   throw new Error()
+  // })
 
 utils.injectRoutes(router, authenticationRoutes)
 
 app
   .use(bodyParser())
-  .use(async (ctx, next) => {
+  .use(async (ctx, next) => { // database link middleware
     ctx.db = db
     await next()
   })
-  .use(async (ctx, next) => {
+  .use(async (ctx, next) => { // error middleware
     try {
       await next()
     } catch (err) {
@@ -44,7 +45,7 @@ app
       ctx.body = err.message
     }
   })
-  .use(async (ctx, next) => {
+  .use(async (ctx, next) => { // token validation middleware
     if (/^\/api/.test(ctx.request.url)) {
       const accessToken = ctx.cookies.get('access_token')
       if (!accessToken) ctx.throw(403, 'No access token found')
@@ -52,10 +53,7 @@ app
         const jwtPayload = jwt.verify(accessToken, secret)
         ctx.state.jwtPayload = jwtPayload
         if (jwtPayload.expire < dayjs().unix()) { // token expired
-          const payload = { username: jwtPayload.username, expire: dayjs().unix() }
-          const token = jwt.sign(payload, secret)
-          ctx.state.token = token
-          ctx.state.jwtPayload = jwt.verify(token, secret)
+          ctx.state[GENERATE_TOKEN] = { userId: jwtPayload.userId }
         }
       } catch (err) {
         ctx.throw(401, 'Failed to verify token')
@@ -64,9 +62,12 @@ app
     await next()
   })
   .use(router.routes())
-  .use(async (ctx, next) => {
-    if (ctx.state.token) {
-      ctx.cookies.set('access_token', ctx.state.token, { httpOnly: true, /*secure: true, */maxAge: 3600000 })
+  .use(async (ctx, next) => { // action handler middleware
+    if (ctx.state[GENERATE_TOKEN]) { // generate authentication token
+      const jwtPayload = { userId: ctx.state[GENERATE_TOKEN].userId, expire: dayjs().unix() }
+      const token = jwt.sign(jwtPayload, secret)
+      ctx.state.jwtPayload = jwtPayload
+      ctx.cookies.set('access_token', token, { httpOnly: true, /*secure: true, */maxAge: 3600000 })
     }
     await next()
   })

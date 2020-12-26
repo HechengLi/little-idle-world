@@ -1,12 +1,11 @@
 const bcrypt = require('bcrypt')
 const Joi = require('joi')
-const jwt = require('jsonwebtoken')
-const dayjs = require('dayjs')
 
 const User = require('../entity/user')
 const UserRepository = require('../repository/userRepository')
 
-const secret = process.env.JWT_SECRET || 'secret'
+const { GENERATE_TOKEN } = require('../utils/actions')
+
 const saltRounds = 10
 
 const authenticationRoutes = {
@@ -33,11 +32,9 @@ const authenticationRoutes = {
     if (!match) {
       ctx.throw(401, 'Incorrect username/password')
     }
-    const payload = { username, expire: dayjs().unix() }
-    const token = jwt.sign(payload, secret)
-    ctx.state.token = token
-    ctx.body = token
+    ctx.state[GENERATE_TOKEN] = { userId: user.id }
     await next()
+    ctx.status = 200
   }],
   '/uapi/register': ['post', async (ctx, next) => {
     const connection = await ctx.db.getConnection()

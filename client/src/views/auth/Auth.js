@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import Nav from '../../components/Nav'
 import Town from '../Town'
 import Character from '../Character'
 import World from '../World'
@@ -12,7 +13,7 @@ import NotFound from '../NotFound'
 const Auth = () => {
   const [status, setStatus] = useState(0)
   useEffect(() => {
-    axios.get('/data')
+    axios.get('/api/data')
       .then(res => {
         setStatus(res.status)
       })
@@ -24,15 +25,18 @@ const Auth = () => {
   else if (status === 403) return <Redirect to="/login" />
 
   return (
-    <Switch>
-      <Route path="/" exact><Redirect to="/town" /></Route>
-      <Route path="/town" component={Town} />
-      <Route path="/character" component={Character} />
-      <Route path="/world" component={World} />
-      <Route path="/inventory" component={Inventory} />
-      <Route path="/setting" component={Setting} />
-      <Route path="*" component={NotFound} />
-    </Switch>
+    <React.Fragment>
+      <Nav />
+      <Switch>
+        <Route path="/" exact><Redirect to="/town" /></Route>
+        <Route path="/town" component={Town} />
+        <Route path="/character" component={Character} />
+        <Route path="/world" component={World} />
+        <Route path="/inventory" component={Inventory} />
+        <Route path="/setting" component={Setting} />
+        <Route path="*" component={NotFound} />
+      </Switch>
+    </React.Fragment>
   )
 }
 
