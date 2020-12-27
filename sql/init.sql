@@ -3,6 +3,7 @@ USE little_idle_world;
 CREATE TABLE IF NOT EXISTS tb_user (
 	id int NOT NULL AUTO_INCREMENT,
 	username varchar(255) NOT NULL UNIQUE,
+    nickname varchar(255) NOT NULL UNIQUE,
     password varchar(255) NOT NULL,
     email varchar(255) NOT NULL,
     PRIMARY KEY (id)

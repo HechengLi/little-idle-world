@@ -35,6 +35,7 @@ const StyledNav = styled(Nav)`
   ul {
     display: flex;
     justify-content: space-between;
+    margin: 0;
     
     li {
       width: 100%;

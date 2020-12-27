@@ -13,8 +13,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  max-width: 1200px;
-  margin: auto;
 }
 
 code {
@@ -42,7 +40,6 @@ button, button:focus {
   border-spacing: 0;
   list-style: none outside none;
   margin: 0;
-  padding: 0;
   text-align: left;
   text-decoration: none;
   text-indent: 0;

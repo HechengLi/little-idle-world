@@ -43,11 +43,15 @@ const authenticationRoutes = {
       username: Joi.string()
         .alphanum()
         .min(4)
-        .max(30)
+        .max(32)
+        .required(),
+      nickname: Joi.string()
+        .min(1)
+        .max(8)
         .required(),
       password: Joi.string()
         .min(8)
-        .max(30)
+        .max(32)
         .required(),
       email: Joi.string()
         .email({ minDomainSegments: 2 })
