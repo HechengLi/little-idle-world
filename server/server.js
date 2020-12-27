@@ -9,6 +9,7 @@ const db = new DataBase()
 
 const utils = require('./utils/utils')
 const authenticationRoutes = require('./routes/authentication')
+const dataRoutes = require('./routes/data')
 const { GENERATE_TOKEN } = require('./utils/actions')
 
 const secret = process.env.JWT_SECRET || 'secret'
@@ -16,10 +17,7 @@ const secret = process.env.JWT_SECRET || 'secret'
 const app = new Koa()
 const router = new Router()
 
-router
-  .get('/api/data', async (ctx, next) => {
-    ctx.body = ctx.state.jwtPayload.userId
-  })
+// router
   // .post('/custom_error', (ctx, next) => {
   //   ctx.throw(400, 'test error')
   // })
@@ -28,6 +26,7 @@ router
   // })
 
 utils.injectRoutes(router, authenticationRoutes)
+utils.injectRoutes(router, dataRoutes)
 
 app
   .use(bodyParser())

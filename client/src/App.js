@@ -8,6 +8,7 @@ import {
 
 import Auth from './views/auth/Auth'
 import Login from './views/auth/Login'
+import Register from './views/auth/Register'
 
 import './App.css'
 
@@ -18,6 +19,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact><Redirect to="/town" /></Route>
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
           <Route path="*" component={Auth} />
         </Switch>
       </div>
