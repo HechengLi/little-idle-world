@@ -31,7 +31,7 @@ utils.injectRoutes(router, dataRoutes)
 app
   .use(bodyParser())
   .use(async (ctx, next) => { // database link middleware
-    ctx.db = db
+    ctx.connection = await db.getConnection()
     await next()
   })
   .use(async (ctx, next) => { // error middleware
@@ -68,6 +68,10 @@ app
       ctx.state.jwtPayload = jwtPayload
       ctx.cookies.set('access_token', token, { httpOnly: true, /*secure: true, */maxAge: 3600000 })
     }
+    await next()
+  })
+  .use(async (ctx, next) => {
+    ctx.connection.release()
     await next()
   })
   .use(router.allowedMethods())

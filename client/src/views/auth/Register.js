@@ -1,8 +1,9 @@
 import React, { useState }  from 'react'
 import { useHistory } from 'react-router-dom'
-import axios from 'axios'
 import styled from 'styled-components'
 import { Form, Input, Checkbox, Button } from 'antd'
+
+import $request from '../../resource/plugins/request'
 
 const Register = ({ className }) => {
   const [registering, setRegistering] = useState(false)
@@ -10,15 +11,20 @@ const Register = ({ className }) => {
 
   const onFinish = values => {
     setRegistering(true)
-    const data = Object.assign({} , values)
-    delete data.passwordRepeat
-    axios.post('/uapi/register', data)
+    $request.post(
+      '/uapi/register',
+      {
+        username: values.username,
+        password: values.password,
+        nickname: values.nickname,
+        email: values.email
+      }
+    )
       .then(res => {
         history.push('/login')
       })
       .catch(err => {
         setRegistering(false)
-        console.log(err)
       })
   }
 
@@ -123,7 +129,7 @@ const Register = ({ className }) => {
         style={{ textAlign: 'left', marginBottom: 0 }}
       >
         <Checkbox>
-          我已阅读并同意 <a href="">用户条款</a>
+          我已阅读并同意 <Button type="link">用户条款</Button>
         </Checkbox>
       </Form.Item>
       <Form.Item {...tailFormItemLayout} style={{ textAlign: 'right' }}>

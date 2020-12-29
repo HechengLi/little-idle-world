@@ -10,7 +10,7 @@ const saltRounds = 10
 
 const authenticationRoutes = {
   '/uapi/auth': ['post', async (ctx, next) => {
-    const connection = await ctx.db.getConnection()
+    const connection = await ctx.connection
     const userRepository = new UserRepository()
 
     const data = ctx.request.body
@@ -33,11 +33,11 @@ const authenticationRoutes = {
       ctx.throw(401, 'Incorrect username/password')
     }
     ctx.state[GENERATE_TOKEN] = { userId: user.id }
-    await next()
     ctx.status = 200
+    await next()
   }],
   '/uapi/register': ['post', async (ctx, next) => {
-    const connection = await ctx.db.getConnection()
+    const connection = ctx.connection
     const userRepository = new UserRepository()
     const schema = Joi.object({
       username: Joi.string()
@@ -64,7 +64,26 @@ const authenticationRoutes = {
     if (validation.error) {
       ctx.throw(422, validation.error)
     }
-    await userRepository.insert(connection, new User(data))
+    try {
+      await userRepository.insert(connection, new User(data))
+    } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY' || err.errno == 1062) {
+        switch(err.sqlMessage) {
+          case 'Duplicate entry \'test\' for key \'tb_user.username\'':
+            ctx.throw(409, '用户名已存在')
+            break
+          case 'Duplicate entry \'test\' for key \'tb_user.nickname\'':
+            ctx.throw(409, '昵称已存在')
+            break
+          case 'Duplicate entry \'test\' for key \'tb_user.email\'':
+            ctx.throw(409, '邮箱已存在')
+            break
+          default: throw err
+        }
+      } else {
+        throw err
+      }
+    }
     ctx.status = 200
     await next()
   }]
