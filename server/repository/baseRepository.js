@@ -9,6 +9,24 @@ class BaseRepository {
     else return queryResult
   }
 
+  convertHandler(resolve, reject) {
+    return (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      else {
+        const convertedData = this.convertType(results)
+        if (convertedData.length === 0) {
+          const error = new Error()
+          error.status = 404
+          error.message = '找不到用户'
+          reject(error)
+        }
+        resolve(convertedData[0])
+      }
+    }
+  }
+
   insert(connection, data) {
     return new Promise((resolve, reject) => {
       connection.query(`INSERT INTO ${this.table} SET ?`, data, (error, results, fields) => {
