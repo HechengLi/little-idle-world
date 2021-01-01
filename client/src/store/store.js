@@ -1,15 +1,17 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 
-import skillsReducer from './skills/reducers'
-import inventoryReducer from './inventory/reducers'
+import userReducer from './user/reducer'
+import skillsReducer from './skills/reducer'
+import inventoryReducer from './inventory/reducer'
 
 const rootReducer = combineReducers({
+  user: userReducer,
   skills: skillsReducer,
   inventory: inventoryReducer
 })
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export default function configureStore(preloadedState) {
   return createStore(

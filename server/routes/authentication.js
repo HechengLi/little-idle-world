@@ -30,7 +30,7 @@ const authenticationRoutes = {
     const user = await userRepository.findByUsername(connection, username)
     const match = await bcrypt.compare(password, user.password)
     if (!match) {
-      ctx.throw(401, 'Incorrect username/password')
+      ctx.throw(401, '用户名/密码错误')
     }
     ctx.state[GENERATE_TOKEN] = { userId: user.id }
     ctx.status = 200

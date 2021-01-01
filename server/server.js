@@ -38,10 +38,11 @@ app
     try {
       await next()
     } catch (err) {
-      //TODO: log error
-      console.log(err)
+      // TODO: log error
+      // console.log(err)
       ctx.status = err.statusCode || err.status || 500
       ctx.body = err.message
+      ctx.connection.release()
     }
   })
   .use(async (ctx, next) => { // token validation middleware

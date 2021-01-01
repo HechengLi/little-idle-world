@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import axios from 'axios'
+import $request from '../../resource/plugins/request'
 import styled from 'styled-components'
 import { Form, Input, Button } from 'antd'
 
-const Login = ({ className }) => {
+import { updateUserStatus } from '../../store/user/action'
+
+const Login = ({ className, updateUserStatus }) => {
   const [loggingIn, setLoggingIn] = useState(false)
   const history = useHistory()
 
   const onFinish = values => {
     setLoggingIn(true)
-    axios.post('/uapi/auth', values)
+    $request.post('/uapi/auth', values)
       .then(res => {
+        updateUserStatus(true)
         history.push('/')
       })
       .catch(err => {
@@ -68,13 +72,16 @@ const Login = ({ className }) => {
       >
         <Input.Password />
       </Form.Item>
-      <Form.Item {...tailFormItemLayout} style={{ textAlign: 'right' }}>
-        没有账号? <Button type="link" onClick={() => history.push('/register')}>前往注册</Button>
-      </Form.Item>
       <Form.Item {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit" loading={loggingIn}>
           登录
         </Button>
+      </Form.Item>
+      <Form.Item className='mb-0' {...tailFormItemLayout} style={{ textAlign: 'right' }}>
+        没有账号? <Button type="link" onClick={() => history.push('/register')}>前往注册</Button>
+      </Form.Item>
+      <Form.Item {...tailFormItemLayout} style={{ textAlign: 'right' }}>
+        忘记密码? <Button type="link" onClick={() => history.push('')}>找回密码</Button>
       </Form.Item>
     </Form>
   )
@@ -90,4 +97,13 @@ const LoginStyled = styled(Login)`
   transform: translate(-50%, -50%);
 `
 
-export default LoginStyled
+const mapDispatchToProps = dispatch => ({
+  updateUserStatus: status => dispatch(updateUserStatus(status))
+})
+
+const LoginReduxed = connect(
+  null,
+  mapDispatchToProps
+)(LoginStyled)
+
+export default LoginReduxed

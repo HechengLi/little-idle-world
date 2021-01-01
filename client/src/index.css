@@ -48,3 +48,7 @@ button, button:focus {
   font: inherit;
   outline: none;
 }
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
