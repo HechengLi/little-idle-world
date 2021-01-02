@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import $request from '../../resource/plugins/request'
@@ -6,17 +6,27 @@ import styled from 'styled-components'
 import { Form, Input, Button } from 'antd'
 
 import { updateUserStatus } from '../../store/user/action'
+import { requestUserData } from '../../store/data/action'
 
-const Login = ({ className, updateUserStatus }) => {
+const Login = ({ className, status, updateUserStatus, requestUserData }) => {
   const [loggingIn, setLoggingIn] = useState(false)
   const history = useHistory()
+
+  useEffect(() => {
+    switch(status) {
+      case 2:
+        history.push('/')
+        break
+      default: break
+    }
+  }, [status, updateUserStatus, history])
 
   const onFinish = values => {
     setLoggingIn(true)
     $request.post('/uapi/auth', values)
       .then(res => {
+        requestUserData()
         updateUserStatus(true)
-        history.push('/')
       })
       .catch(err => {
         setLoggingIn(false)
@@ -97,12 +107,17 @@ const LoginStyled = styled(Login)`
   transform: translate(-50%, -50%);
 `
 
+const mapStateToProps = state => ({
+  status: state.data.status
+})
+
 const mapDispatchToProps = dispatch => ({
-  updateUserStatus: status => dispatch(updateUserStatus(status))
+  updateUserStatus: status => dispatch(updateUserStatus(status)),
+  requestUserData: () => dispatch(requestUserData())
 })
 
 const LoginReduxed = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LoginStyled)
 

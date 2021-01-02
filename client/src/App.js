@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import {
@@ -12,7 +12,6 @@ import Nav from './components/Nav'
 import Login from './views/auth/Login'
 import Register from './views/auth/Register'
 import checkLogin from './views/auth/checkLogin'
-import $request from './resource/plugins/request'
 import Town from './views/Town'
 import Character from './views/Character'
 import World from './views/World'
@@ -21,6 +20,7 @@ import Setting from './views/Setting'
 import NotFound from './views/NotFound'
 
 import { updateUserStatus } from './store/user/action'
+import { requestUserData } from './store/data/action'
 
 import './App.css'
 
@@ -42,31 +42,33 @@ const ProtectedPages = ({ loggedIn }) => {
   )
 }
 
-const mapStateToProps = state => ({
-  loggedIn: state.user.status
-})
-
 const ProtectedPageReduxed = connect(
-  mapStateToProps
+  state => ({
+    loggedIn: state.user.status
+  })
 )(ProtectedPages)
 
-const Main = ({ updateUserStatus }) => {
-  const [status, setStatus] = useState(0)
+const Main = ({ status, updateUserStatus, requestUserData }) => {
   const history = useHistory()
 
   useEffect(() => {
-    $request.get('/api/data')
-      .then(res => {
-        updateUserStatus(true)
-        setStatus(res.status)
-      })
-      .catch(err => {
+    requestUserData()
+  }, [requestUserData])
+
+  useEffect(() => {
+    switch(status) {
+      case 1:
         updateUserStatus(false)
         history.push('/login')
-        setStatus(err.response.status)
-      })
-  }, [updateUserStatus])
-  if (status === 0) return <div>loading</div>
+        break
+      case 2:
+        updateUserStatus(true)
+        break
+      default: break
+    }
+  }, [status, updateUserStatus, history])
+
+  if (status <= 0) return <div>loading</div>
 
   return (
     <div className="App">
@@ -80,13 +82,14 @@ const Main = ({ updateUserStatus }) => {
   )
 }
 
-const mapDispatchToProps = dispatch => ({
-  updateUserStatus: status => dispatch(updateUserStatus(status))
-})
-
 const MainReduxed =  connect(
-  null,
-  mapDispatchToProps
+  state => ({
+    status: state.data.status
+  }),
+  dispatch => ({
+    updateUserStatus: status => dispatch(updateUserStatus(status)),
+    requestUserData: () => dispatch(requestUserData())
+  })
 )(Main)
 
 const App = () => {
