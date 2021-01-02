@@ -2,7 +2,10 @@ const bcrypt = require('bcrypt')
 const Joi = require('joi')
 
 const User = require('../entity/user')
+const Stat = require('../entity/stat')
 const UserRepository = require('../repository/userRepository')
+const StatRepository = require('../repository/statRepository')
+const defaultStat = require('../data/defaultData/defaultStat')
 
 const { GENERATE_TOKEN } = require('../utils/actions')
 
@@ -11,7 +14,7 @@ const saltRounds = 10
 const authenticationRoutes = {
   '/uapi/auth': ['post', async (ctx, next) => {
     const connection = await ctx.connection
-    const userRepository = new UserRepository()
+    const userRepository = new UserRepository(connection)
 
     const data = ctx.request.body
     const schema = Joi.object({
@@ -27,7 +30,8 @@ const authenticationRoutes = {
     }
 
     const { username, password } = data
-    const user = await userRepository.findByUsername(connection, username)
+    const user = await userRepository.findByUsername(username)
+    if (!user) ctx.throw(401, '用户名/密码错误')
     const match = await bcrypt.compare(password, user.password)
     if (!match) {
       ctx.throw(401, '用户名/密码错误')
@@ -38,7 +42,9 @@ const authenticationRoutes = {
   }],
   '/uapi/register': ['post', async (ctx, next) => {
     const connection = ctx.connection
-    const userRepository = new UserRepository()
+    const userRepository = new UserRepository(connection)
+    const statRepository = new StatRepository(connection)
+
     const schema = Joi.object({
       username: Joi.string()
         .alphanum()
@@ -64,9 +70,43 @@ const authenticationRoutes = {
     if (validation.error) {
       ctx.throw(422, validation.error)
     }
-    try {
-      await userRepository.insert(connection, new User(data))
-    } catch (err) {
+
+    await new Promise((resolve, reject) => {
+      connection.beginTransaction(async err => {
+        if (err) throw err
+        // create user
+        let userId
+        try {
+          userId = await userRepository.insert(new User(data))
+        } catch(err) {
+          console.log(1)
+          connection.rollback(err => { if (err) reject(err) })
+          reject(err)
+          return
+        }
+
+        // create user stat
+        const stat = new Stat(defaultStat)
+        stat.user_id = userId
+        try {
+          await statRepository.insert(stat)
+        } catch (err) {
+          connection.rollback(err => { if (err) reject(err) })
+          reject(err)
+          return
+        }
+
+        // commit
+        connection.commit(err => {
+          if (err) {
+            connection.rollback(err => { if (err) reject(err) })
+            reject(err)
+          } else {
+            resolve()
+          }
+        })
+      })
+    }).catch(err => {
       if (err.code === 'ER_DUP_ENTRY' || err.errno == 1062) {
         switch(err.sqlMessage) {
           case 'Duplicate entry \'test\' for key \'tb_user.username\'':
@@ -83,7 +123,8 @@ const authenticationRoutes = {
       } else {
         throw err
       }
-    }
+    })
+
     ctx.status = 200
     await next()
   }]
